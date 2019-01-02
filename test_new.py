@@ -18,7 +18,7 @@ def get_args():
     parser.add_argument("--nms_threshold", type=float, default=0.5)
     parser.add_argument("--root_path", type=str, default="data", help="the root folder of dataset")
     parser.add_argument("--pre_trained_model_type", type=str, choices=["model", "params"], default="model")
-    parser.add_argument("--pre_trained_model_path", type=str, default="trained_models/whole_model_trained_yolo_coco")
+    parser.add_argument("--pre_trained_model_path", type=str, default="trained_models/whole_model_trained_yolo")
     parser.add_argument("--output", type=str, default="predictions")
 
     args = parser.parse_args()
@@ -76,7 +76,7 @@ def test(opt):
             ymax = int(min((pred[1] + pred[3]) / height_ratio, height))
             color = (0, 255, 255)
             cv2.rectangle(output_image, (xmin, ymin), (xmax, ymax), color, 2)
-            text_size = cv2.getTextSize(pred[5] + ' : %.2f' % pred[4], cv2.FONT_HERSHEY_PLAIN, 1, 1)[0]
+            text_size = cv2.getTextSize('person' + ' : %.2f' % pred[4], cv2.FONT_HERSHEY_PLAIN, 1, 1)[0]
             cv2.rectangle(output_image, (xmin, ymin), (xmin + text_size[0] + 3, ymin + text_size[1] + 4), color, -1)
             cv2.putText(
                 output_image, 'Person' + ' : %.2f' % pred[4],

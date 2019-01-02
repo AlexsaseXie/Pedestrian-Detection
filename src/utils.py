@@ -227,7 +227,7 @@ def new_post_processing(logits, image_size, anchors, conf_threshold, nms_thresho
             keep = keep.cuda()
 
         keep = (keep == 0)
-        selected_boxes.append(boxes[order][keep[:, None].expand_as(boxes)].view(-1, 6).contiguous())
+        selected_boxes.append(boxes[order][keep[:, None].expand_as(boxes)].view(-1, 5).contiguous())
 
     final_boxes = []
     for boxes in selected_boxes:
