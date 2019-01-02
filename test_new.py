@@ -74,12 +74,12 @@ def test(opt):
             ymin = int(max(pred[1] / height_ratio, 0))
             xmax = int(min((pred[0] + pred[2]) / width_ratio, width))
             ymax = int(min((pred[1] + pred[3]) / height_ratio, height))
-            color = (0, 255, 255)
+            color = (255, 0, 0)
             cv2.rectangle(output_image, (xmin, ymin), (xmax, ymax), color, 2)
             text_size = cv2.getTextSize('person' + ' : %.2f' % pred[4], cv2.FONT_HERSHEY_PLAIN, 1, 1)[0]
             cv2.rectangle(output_image, (xmin, ymin), (xmin + text_size[0] + 3, ymin + text_size[1] + 4), color, -1)
             cv2.putText(
-                output_image, 'Person' + ' : %.2f' % pred[4],
+                output_image, 'person' + ' : %.2f' % pred[4],
                 (xmin, ymin + text_size[1] + 4), cv2.FONT_HERSHEY_PLAIN, 1,
                 (255, 255, 255), 1)
             print("Bounding box: ({},{}) ({},{})".format(xmin, xmax, ymin, ymax))
