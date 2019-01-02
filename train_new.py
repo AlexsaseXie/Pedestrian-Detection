@@ -14,7 +14,7 @@ import shutil
 
 def get_args():
     parser = argparse.ArgumentParser("You Only Look Once: Unified, Real-Time Object Detection")
-    parser.add_argument("--image_size", type=int, default=448, help="The common width and height for all images")
+    parser.add_argument("--image_size", type=int, default=416, help="The common width and height for all images")
     parser.add_argument("--batch_size", type=int, default=10, help="The number of images per batch")
     parser.add_argument("--momentum", type=float, default=0.9)
     parser.add_argument("--decay", type=float, default=0.0005)
@@ -32,7 +32,6 @@ def get_args():
                         help="Early stopping's parameter: number of epochs with no improvement after which training will be stopped. Set to 0 to disable this technique.")
     parser.add_argument("--train_set", type=str, default="train")
     parser.add_argument("--test_set", type=str, default="val")
-    parser.add_argument("--year", type=str, default="2014", help="The year of dataset (2014 or 2017)")
     parser.add_argument("--data_path", type=str, default="data/", help="the root folder of dataset")
     parser.add_argument("--pre_trained_model_type", type=str, choices=["model", "params", "none"], default="none")
     parser.add_argument("--pre_trained_model_path", type=str, default="trained_models/whole_model_trained_yolo_coco")
@@ -86,7 +85,7 @@ def train(opt):
     # when you want to retrain the model based on my trained weights. if you uncomment it,
     # you will see the loss is already very small at the beginning.
     ## nn.init.normal_(list(model.modules())[-1].weight, 0, 0.01)
-    log_path = os.path.join(opt.log_path, "{}".format(opt.year))
+    log_path = os.path.join(opt.log_path, "new")
     if os.path.isdir(log_path):
         shutil.rmtree(log_path)
     os.makedirs(log_path)

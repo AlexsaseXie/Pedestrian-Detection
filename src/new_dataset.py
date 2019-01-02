@@ -7,7 +7,7 @@ import copy
 
 
 class NewDataset(Dataset):
-    def __init__(self, root_path="data/19118", image_size=448, is_training=True):
+    def __init__(self, root_path="data", image_size=416, is_training=True):
         if is_training == True:
             self.image_path = os.path.join(root_path, "train")
             anno_path = os.path.join(root_path, "train_annotations.txt")
