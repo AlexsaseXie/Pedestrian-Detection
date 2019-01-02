@@ -166,22 +166,27 @@ def new_post_processing(logits, image_size, anchors, conf_threshold, nms_thresho
     score_thresh = logits[:,:,4,:] > conf_threshold
     score_thresh_flat = score_thresh.view(-1)
 
-    coords = logits.transpose(2, 3)[..., 0:4]
-    coords = coords[score_thresh[..., None].expand_as(coords)].view(-1, 4)
-    scores = logits[:,:,4,:][score_thresh]
-    detections = torch.cat([coords, scores[:, None]], dim=1)
+    if score_thresh.sum() == 0:
+        predicted_boxes = []
+        for i in range(batch):
+            predicted_boxes.append(torch.Tensor([]))
+    else :
+        coords = logits.transpose(2, 3)[..., 0:4]
+        coords = coords[score_thresh[..., None].expand_as(coords)].view(-1, 4)
+        scores = logits[:,:,4,:][score_thresh]
+        detections = torch.cat([coords, scores[:, None]], dim=1)
 
-    max_det_per_batch = num_anchors * h * w
-    slices = [slice(max_det_per_batch * i, max_det_per_batch * (i + 1)) for i in range(batch)]
-    det_per_batch = torch.IntTensor([score_thresh_flat[s].int().sum() for s in slices])
-    split_idx = torch.cumsum(det_per_batch, dim=0)
+        max_det_per_batch = num_anchors * h * w
+        slices = [slice(max_det_per_batch * i, max_det_per_batch * (i + 1)) for i in range(batch)]
+        det_per_batch = torch.IntTensor([score_thresh_flat[s].int().sum() for s in slices])
+        split_idx = torch.cumsum(det_per_batch, dim=0)
 
-    # Group detections per image of batch
-    predicted_boxes = []
-    start = 0
-    for end in split_idx:
-        predicted_boxes.append(detections[start: end])
-        start = end
+        # Group detections per image of batch
+        predicted_boxes = []
+        start = 0
+        for end in split_idx:
+            predicted_boxes.append(detections[start: end])
+            start = end
 
     selected_boxes = []
     for boxes in predicted_boxes:
