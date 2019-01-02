@@ -1,7 +1,6 @@
 import os
 from torch.utils.data import Dataset
 from src.data_augmentation import *
-import cv2
 import pickle
 import copy
 
@@ -40,8 +39,10 @@ class NewDataset(Dataset):
         with open(anno_path, 'r') as f:
             anno_list = f.readlines()
 
+        print(len(anno_list))
         self.anno_data = []
         for anno_str in anno_list:
+            anno_str = anno_str[:-1]
             tmp_list = anno_str.split(' ')
             tmp = {}
             tmp['image'] = tmp_list[0]
