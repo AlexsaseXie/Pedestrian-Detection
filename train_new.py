@@ -15,11 +15,11 @@ import shutil
 def get_args():
     parser = argparse.ArgumentParser("You Only Look Once: Unified, Real-Time Object Detection")
     parser.add_argument("--image_size", type=int, default=416, help="The common width and height for all images")
-    parser.add_argument("--batch_size", type=int, default=10, help="The number of images per batch")
+    parser.add_argument("--batch_size", type=int, default=20, help="The number of images per batch")
     parser.add_argument("--momentum", type=float, default=0.9)
     parser.add_argument("--decay", type=float, default=0.0005)
     parser.add_argument("--dropout", type=float, default=0.5)
-    parser.add_argument("--num_epoches", type=int, default=160)
+    parser.add_argument("--num_epoches", type=int, default=30)
     parser.add_argument("--test_interval", type=int, default=5, help="Number of epoches between testing phases")
     parser.add_argument("--object_scale", type=float, default=1.0)
     parser.add_argument("--noobject_scale", type=float, default=0.5)
@@ -48,7 +48,7 @@ def train(opt):
     else:
         torch.manual_seed(123)
     learning_rate_schedule = {"0": 1e-5, "5": 1e-4,
-                              "80": 1e-5, "110": 1e-6}
+                              "10": 1e-5, "20": 1e-6}
     training_params = {"batch_size": opt.batch_size,
                        "shuffle": True,
                        "drop_last": True,
