@@ -33,7 +33,7 @@ def get_args():
     parser.add_argument("--train_set", type=str, default="train")
     parser.add_argument("--test_set", type=str, default="val")
     parser.add_argument("--year", type=str, default="2014", help="The year of dataset (2014 or 2017)")
-    parser.add_argument("--data_path", type=str, default="data/COCO", help="the root folder of dataset")
+    parser.add_argument("--data_path", type=str, default="data", help="the root folder of dataset")
     parser.add_argument("--pre_trained_model_type", type=str, choices=["model", "params", "none"], default="none")
     parser.add_argument("--pre_trained_model_path", type=str, default="trained_models/whole_model_trained_yolo_coco")
     parser.add_argument("--log_path", type=str, default="tensorboard/yolo_coco")
@@ -49,7 +49,7 @@ def train(opt):
     else:
         torch.manual_seed(123)
     learning_rate_schedule = {"0": 1e-5, "5": 1e-4,
-                              "80": 1e-5, "110": 1e-6}
+                              "10": 1e-5, "20": 1e-6}
     training_params = {"batch_size": opt.batch_size,
                        "shuffle": True,
                        "drop_last": True,
