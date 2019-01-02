@@ -54,7 +54,7 @@ class NewDataset(Dataset):
                     continue
                 block.append( int(tmp_list[i]) )
                 if (i % 5 == 0):
-                    block.append(int(tmp_list[i-4]))
+                    block.append(int(tmp_list[i-4]) - 1)
                     tmp['objects'].append(block)
                     block = []
 
