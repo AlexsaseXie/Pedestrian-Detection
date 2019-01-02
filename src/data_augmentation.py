@@ -125,3 +125,26 @@ class Resize(object):
             new_label.append([resized_xmin, resized_ymin, resize_width, resize_height, lb[4]])
 
         return image, new_label
+
+
+class NewResize(object):
+
+    def __init__(self, image_size):
+        super().__init__()
+        self.image_size = image_size
+
+    def __call__(self, data):
+        image, label = data
+        height, width = image.shape[:2]
+        image = cv2.resize(image, (self.image_size, self.image_size))
+        width_ratio = float(self.image_size) / width
+        height_ratio = float(self.image_size) / height
+        new_label = []
+        for lb in label:
+            resized_xmin = lb[0] * width_ratio
+            resized_ymin = lb[1] * height_ratio
+            resize_width = lb[2] * width_ratio
+            resize_height = lb[3] * height_ratio
+            new_label.append([resized_xmin, resized_ymin, resize_width, resize_height, lb[4]])
+
+        return image, new_label

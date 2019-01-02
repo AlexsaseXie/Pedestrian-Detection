@@ -31,6 +31,8 @@ class NewDataset(Dataset):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         objects = copy.deepcopy(self.anno_data[item]['objects'])
 
+        transformations = Compose([NewResize(self.image_size)])
+        image, objects = transformations((image, objects))
         return np.transpose(np.array(image, dtype=np.float32), (2, 0, 1)), np.array(objects, dtype=np.float32)
     
 

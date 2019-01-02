@@ -8,7 +8,7 @@ import torch.nn as nn
 
 class NewYoloLoss(nn.modules.loss._Loss):
     # The loss I borrow from LightNet repo.
-    def __init__(self, anchors, reduction= 256.0 / 7.0, coord_scale=1.0, noobject_scale=1.0,
+    def __init__(self, anchors, reduction=32, coord_scale=1.0, noobject_scale=1.0,
                  object_scale=5.0, class_scale=1.0, thresh=0.6):
         super(NewYoloLoss, self).__init__()
         self.num_anchors = len(anchors)

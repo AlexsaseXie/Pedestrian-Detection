@@ -25,7 +25,7 @@ def get_args():
     parser.add_argument("--noobject_scale", type=float, default=0.5)
     parser.add_argument("--class_scale", type=float, default=1.0)
     parser.add_argument("--coord_scale", type=float, default=5.0)
-    parser.add_argument("--reduction", type=float, default=256.0/7.0)
+    parser.add_argument("--reduction", type=int, default=32)
     parser.add_argument("--es_min_delta", type=float, default=0.0,
                         help="Early stopping's parameter: minimum change loss to qualify as an improvement")
     parser.add_argument("--es_patience", type=int, default=0,
