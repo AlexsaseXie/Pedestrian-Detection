@@ -50,6 +50,8 @@ def test(opt):
             model.load_state_dict(torch.load(opt.pre_trained_model_path, map_location=lambda storage, loc: storage))
     model.eval()
 
+    f = open(output_folder + '/result.txt', 'w')
+
     for id in val_set.anno_data:
         image_path = os.path.join(val_set.image_path, id["image"])
         image = cv2.imread(image_path)
@@ -77,6 +79,10 @@ def test(opt):
             ymin = int(max(pred[1] / height_ratio, 0))
             xmax = int(min((pred[0] + pred[2]) / width_ratio, width))
             ymax = int(min((pred[1] + pred[3]) / height_ratio, height))
+            
+            f.write('%s %.04f %d %d %d %d\n' % (id['image'], 
+                pred[4], xmin , ymin, xmax - xmin, ymax - ymin))
+
             color = colors[CLASSES.index(pred[5])]
             cv2.rectangle(output_image, (xmin, ymin), (xmax, ymax), color, 2)
             text_size = cv2.getTextSize(pred[5] + ' : %.2f' % pred[4], cv2.FONT_HERSHEY_PLAIN, 1, 1)[0]
