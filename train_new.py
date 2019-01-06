@@ -9,6 +9,7 @@ from src.new_dataset import NewDataset
 from src.utils import *
 from src.new_loss import NewYoloLoss
 from src.new_yolo_net import New_Yolo
+from src.new_yolo_net_m import New_Yolo_M
 import shutil
 
 
@@ -19,7 +20,7 @@ def get_args():
     parser.add_argument("--momentum", type=float, default=0.9)
     parser.add_argument("--decay", type=float, default=0.0005)
     parser.add_argument("--dropout", type=float, default=0.5)
-    parser.add_argument("--num_epoches", type=int, default=30)
+    parser.add_argument("--num_epoches", type=int, default=20)
     parser.add_argument("--test_interval", type=int, default=2, help="Number of epoches between testing phases")
     parser.add_argument("--object_scale", type=float, default=1.0)
     parser.add_argument("--noobject_scale", type=float, default=0.5)
@@ -34,9 +35,10 @@ def get_args():
     parser.add_argument("--test_set", type=str, default="val")
     parser.add_argument("--data_path", type=str, default="data/", help="the root folder of dataset")
     parser.add_argument("--pre_trained_model_type", type=str, choices=["model", "params", "none"], default="none")
-    parser.add_argument("--pre_trained_model_path", type=str, default="trained_models/whole_model_trained_yolo_coco")
+    parser.add_argument("--pre_trained_model_path", type=str, default="trained_models/whole_model_trained_no_cls_new_anchor")
     parser.add_argument("--log_path", type=str, default="tensorboard/yolo_coco")
     parser.add_argument("--saved_path", type=str, default="trained_models")
+    parser.add_argument("--use_m", type=bool, default=False)
 
     args = parser.parse_args()
     return args
@@ -47,8 +49,8 @@ def train(opt):
         torch.cuda.manual_seed(123)
     else:
         torch.manual_seed(123)
-    learning_rate_schedule = {"0": 1e-5, "5": 1e-4,
-                              "10": 1e-5, "20": 1e-6}
+    learning_rate_schedule = {"0": 1e-5,
+                              "10": 1e-6}
     training_params = {"batch_size": opt.batch_size,
                        "shuffle": True,
                        "drop_last": True,
@@ -64,6 +66,11 @@ def train(opt):
 
     test_set = NewDataset(opt.data_path, opt.image_size, is_training=False)
     test_generator = DataLoader(test_set, **test_params)
+     
+    if opt.use_m:
+        print('Using M Yolo model')
+        New_Yolo = New_Yolo_M 
+
 
     if torch.cuda.is_available():
         if opt.pre_trained_model_type == "model":
@@ -153,8 +160,8 @@ def train(opt):
                 best_loss = te_loss
                 best_epoch = epoch
                 # torch.save(model, opt.saved_path + os.sep + "trained_yolo_coco")
-                torch.save(model.state_dict(), opt.saved_path + os.sep + "only_params_trained_yolo")
-                torch.save(model, opt.saved_path + os.sep + "whole_model_trained_yolo")
+                torch.save(model.state_dict(), opt.saved_path + os.sep + "only_params_trained_no_cls_new_anchor")
+                torch.save(model, opt.saved_path + os.sep + "whole_model_trained_no_cls_new_anchor")
 
             # Early stopping
             if epoch - best_epoch > opt.es_patience > 0:

@@ -9,17 +9,19 @@ import numpy as np
 from src.utils import *
 import pickle
 from src.new_yolo_net import New_Yolo
+from src.new_yolo_net_m import New_Yolo_M
 from src.new_dataset import *
 
 def get_args():
     parser = argparse.ArgumentParser("You Only Look Once: Unified, Real-Time Object Detection")
     parser.add_argument("--image_size", type=int, default=416, help="The common width and height for all images")
-    parser.add_argument("--conf_threshold", type=float, default=0.35)
-    parser.add_argument("--nms_threshold", type=float, default=0.5)
+    parser.add_argument("--conf_threshold", type=float, default=0.18)
+    parser.add_argument("--nms_threshold", type=float, default=0.6)
     parser.add_argument("--root_path", type=str, default="data", help="the root folder of dataset")
     parser.add_argument("--pre_trained_model_type", type=str, choices=["model", "params"], default="model")
-    parser.add_argument("--pre_trained_model_path", type=str, default="trained_models/whole_model_trained_yolo")
+    parser.add_argument("--pre_trained_model_path", type=str, default="trained_models/whole_model_trained_no_cls_new_anchor")
     parser.add_argument("--output", type=str, default="predictions")
+    parser.add_argument("--use_m", type=bool, default=False)
 
     args = parser.parse_args()
     return args
@@ -29,6 +31,10 @@ def test(opt):
     val_set = NewDataset(opt.root_path, opt.image_size, is_training=False)
 
     output_folder = opt.output
+
+    if opt.use_m:
+        print("Using M")
+        New_Yolo = New_Yolo_M
 
     if os.path.isdir(output_folder):
         shutil.rmtree(output_folder)

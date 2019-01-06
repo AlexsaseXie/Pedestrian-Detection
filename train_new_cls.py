@@ -159,8 +159,8 @@ def train(opt):
                 best_loss = te_loss
                 best_epoch = epoch
                 # torch.save(model, opt.saved_path + os.sep + "trained_yolo_coco")
-                torch.save(model.state_dict(), opt.saved_path + os.sep + "only_params_trained_yolo_cls")
-                torch.save(model, opt.saved_path + os.sep + "whole_model_trained_yolo_cls")
+                torch.save(model.state_dict(), opt.saved_path + os.sep + "only_params_trained_cls_new_anchor")
+                torch.save(model, opt.saved_path + os.sep + "whole_model_trained_cls_new_anchor")
 
             # Early stopping
             if epoch - best_epoch > opt.es_patience > 0:

@@ -5,11 +5,11 @@ import torch.nn as nn
 import torch
 
 
-class New_Yolo(nn.Module):
+class New_Yolo_M(nn.Module):
     def __init__(self,
                  anchors=[(0.1787, 0.8265), (0.3332, 1.5726), (0.5264,2.4903), (0.7843,3.7817), (1.1603, 5.7209),  
                  (2.00, 8.00), (4.00, 8.00)]):
-        super(New_Yolo, self).__init__()
+        super(New_Yolo_M, self).__init__()
         self.anchors = anchors
 
         self.stage1_conv1 = nn.Sequential(nn.Conv2d(3, 32, 3, 1, 1, bias=False), nn.BatchNorm2d(32),
